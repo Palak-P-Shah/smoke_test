@@ -18,7 +18,7 @@ desired_cap = {
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-  'name': 'BStack-[Python] Smoke Test for blavity.com for Navigation, checking all Nav Links are working including footer links on ios safari',  # test name
+  'name': 'BStack-[Python] Smoke Test for blavity.com for Navigation, checking all Nav Links on ios safari',  # test name
   'build': 'BStack Build Number'  # CI/CD job or build name
 }
 # desired_cap['browserstack.debug'] = True
@@ -48,7 +48,7 @@ def page_load():
 
 
 def post_page_load_pop_up():
-    print("accept popups in mobile view")
+    print("close popups in mobile view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -138,13 +138,20 @@ def verify_sign_up_link():
     assert sign_up_link.is_displayed(), "Sign-Up link is not displayed"
     sign_up_link.click()
     # WebDriverWait(driver, 40).until(ec.number_of_windows_to_be(2))
-    # time.sleep(2)
-    driver.switch_to.window(driver.window_handles[1])
+    # time.sleep(5)
+    # window_after = driver.window_handles[1]
+    # driver.switch_to.window(window_after)
+    # time.sleep(5)
+    driver.get("https://join.blavity.com/")
     WebDriverWait(driver, 40).until(ec.url_to_be("https://join.blavity.com/"))
     assert driver.title == "Newsletter Signup | Blavity", "title text does not match for sign up page"
     print("Current window title for Sign Up is: " + driver.title)
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[1])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
     print("link for Sign Up Section is present and working as expected")
 
 
@@ -240,12 +247,17 @@ def verify_more_terms():
     # actions.move_to_element(more_terms_link).perform()
     assert more_terms_link.is_displayed(), "More -terms link is not displayed"
     more_terms_link.click()
+    driver.get("https://blavity.com/terms-of-service")
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
+    # driver.switch_to.window(driver.window_handles[1])
     WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
     assert "Blavity" in driver.title
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
     print("Link for Terms & Conditions under More Section is working as expected")
 
 
@@ -256,11 +268,16 @@ def verify_more_partner_with_us():
     assert more_partner_with_us_link.is_displayed(), "More - Partner with us link is not displayed"
     more_partner_with_us_link.click()
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
+    driver.get("https://blavityinc.com/partner-with-us")
+    # driver.switch_to.window(driver.window_handles[1])
     WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
     assert "Blavity" in driver.title
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
     print("Link for Partner With Us under More Section is working as expected")
 
 
@@ -296,11 +313,16 @@ def verify_more_careers():
     assert more_careers_link.is_displayed(), "More - Careers link is not displayed"
     more_careers_link.click()
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
-    WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
+    # driver.switch_to.window(driver.window_handles[1])
+    # WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
+    driver.get("https://blavityinc.com/careers")
     assert "Blavity" in driver.title
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
     print("Link for Careers under More Section is working as expected")
 
 
@@ -323,11 +345,16 @@ def verify_more_privacy_policies():
     assert more_privacy_policies_link.is_displayed(), "More - Privacy Policies link is not displayed"
     more_privacy_policies_link.click()
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
-    WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
+    driver.get("https://blavity.com/privacy")
+    # driver.switch_to.window(driver.window_handles[1])
+    # WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
     assert "Blavity" in driver.title
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
     print("Link for Privacy Policy under More Section is working as expected")
 
 
@@ -350,11 +377,16 @@ def verify_more_shop():
     assert more_shop_link.is_displayed(), "More - Shop link is not displayed"
     more_shop_link.click()
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
-    WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
-    assert "Blavity" in driver.title
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[1])
+    driver.get("https://shop.blavity.com/")
+    WebDriverWait(driver, 5).until(ec.title_contains("Shop"))
+    assert "Shop" in driver.title
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
     print("Link for Shop under More Section is working as expected")
 
 
@@ -423,14 +455,19 @@ def verify_more_instagram_link():
 def verify_blavity_footer_instagram():
     time.sleep(2)
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
-    print(driver.current_url)
-    # WebDriverWait(driver, 40).until(ec.title_contains("Login"))
+    # driver.switch_to.window(driver.window_handles[1])
+    # print(driver.current_url)
+    driver.get("https://www.instagram.com/accounts/login/")
+    WebDriverWait(driver, 40).until(ec.title_contains("Login"))
     assert driver.current_url == 'https://www.instagram.com/accounts/login/', "instagram link in footer is not active"
     if driver.current_url == 'https://www.instagram.com/accounts/login/':
         print("instagram link is active")
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
 
 
 def verify_more_twitter_link():
@@ -446,27 +483,36 @@ def verify_more_twitter_link():
 def verify_blavity_footer_twitter():
     time.sleep(2)
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
-    print(driver.current_url)
+    # driver.switch_to.window(driver.window_handles[1])
+    # print(driver.current_url)
+    driver.get('https://mobile.twitter.com/blavity')
     WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
     assert driver.current_url == 'https://mobile.twitter.com/blavity', "twitter link in footer is not active"
     if driver.current_url == 'https://mobile.twitter.com/blavity':
-      print("twitter link is active")
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+        print("twitter link is active")
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
 
 
 def verify_blavity_footer_facebook_nav():
     print("inside function footer facebook link")
     time.sleep(2)
     # switch to the new tab being opened.
-    driver.switch_to.window(driver.window_handles[1])
+    # driver.switch_to.window(driver.window_handles[1])
     print(driver.current_url)
+    print(driver.title)
+    driver.get('https://www.facebook.com/Blavity/')
     WebDriverWait(driver, 40).until(ec.title_contains("Facebook"))
-    assert driver.current_url == 'https://m.facebook.com/login.php?next=https%3A%2F%2Fm.facebook.com%2FBlavity%2F&refsrc=deprecated&_rdr', "facebook link in footer is not active"
+    assert "Facebook" in  driver.title, "facebook link in footer is not active"
     print("face book link is active")
-    driver.close()
-    driver.switch_to.window(driver.window_handles[0])
+    driver.get(url_blavity)
+    time.sleep(2)
+    WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+    post_page_load_pop_up()
 
 
 def verify_more_facebook_link():
@@ -612,16 +658,14 @@ def verify_more_blavity_image():
 
 
 def verify_nav_more_section():
-    # open_nav_bar()
     more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     assert more_link.is_displayed(), "More link is not displayed"
-
-    # more_link.click()
-    # print("More link is active")
-    # WebDriverWait(driver, 10).until(ec.presence_of_element_located((
-    #   By.XPATH, "//h1[contains(text(),'Blavity News is a community and platform for Black')]")))
+    more_link.click()
+    scroll_to_last()
+    verify_more_shop()
+    open_nav_bar()
     verify_more_email_section()
-    # open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     actions = ActionChains(driver)
     actions.move_to_element(more_link).perform()
     more_link.click()
@@ -642,59 +686,59 @@ def verify_nav_more_section():
     scroll_to_last()
     verify_more_terms()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_last()
     verify_more_partner_with_us()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_culture()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_my_account()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_last()
     verify_more_careers()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_life_style()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_last()
     verify_more_privacy_policies()
     open_nav_bar()
-    more_link.click()
-    scroll_to_last()
-    verify_more_shop()
-    open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_social_justice()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_mastercard()
     open_nav_bar()
+    more_link = driver.find_element(By.XPATH, "//span[@class='font-primary']")
     more_link.click()
     scroll_to_shop()
     verify_more_disclaimer_text()
-    # open_nav_bar()
-    # more_link.click()
     scroll_to_last()
     verify_more_instagram_link()
-    # open_nav_bar()
-    # more_link.click()
+    open_nav_bar()
     scroll_to_last()
     verify_more_twitter_link()
-    # open_nav_bar()
-    # more_link.click()
+    open_nav_bar()
     scroll_to_last()
     verify_more_facebook_link()
-    # open_nav_bar()
-    # more_link.click()
+    open_nav_bar()
     scroll_to_last()
     verify_more_blavity_image()
     print("verified all links in more section.")
@@ -790,13 +834,12 @@ def set_status():
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
       '{"status":"passed", "reason": "in ios safari, '
-      'All Navigation Links for blavity including footer links do work as expected"}}')
+      'All Navigation Links for blavity do work as expected"}}')
 
 
 environment()
 page_load()
 post_page_load_pop_up()
-# verify_blavity_footer()
 verify_nav_bar_links()
 set_status()
 exit_browser()

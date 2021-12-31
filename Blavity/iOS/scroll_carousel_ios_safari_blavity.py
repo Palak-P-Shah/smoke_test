@@ -18,7 +18,7 @@ desired_cap = {
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for blavity.com in carousel for left and right arrows on ios safari',  # test name
+   'name': 'BStack-[Python] Smoke Test for blavity.com in carousel for left and right slides on ios safari',  # test name
    'build': 'BStack Build Number'  # CI/CD job or build name
 }
 desired_cap['browserstack.debug'] = True
@@ -60,29 +60,38 @@ def verify_scroll_right(count):
 def verify_scroll_carousel():
     print("function called scroll_carousel")
     number_of_entries = driver.find_elements(By.CLASS_NAME, "home-hero-card__title-wrapper")
-    count = 0
-    temp_num = len(number_of_entries)
+    print(len(number_of_entries))
+    count = 1
+    tmp = 0
     while count < len(number_of_entries):
         tmp = count + 1
+        print(tmp)
+        temp = str(tmp)
+        time.sleep(2)
         right_article = driver.find_element(
           By.XPATH,
-          "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div["+str(tmp)+"]/div[1]/div[1]/div[1]/img[1]")
-        time.sleep(1)
+          # "(//div[@class='home-hero-card__title-wrapper']/a[1])["+temp+"]")
+          "(//div[@class='home-hero-card__image-container'])["+temp+"]")
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView();", right_article)
         actions = ActionChains(driver)
         actions.move_to_element(right_article).perform()
-        print("clicked times ",str(count+1))
+        print("slided number of times ", count)
         time.sleep(1)
         # verify_scroll_right(count)
         count += 1
     print("after while loop 1, count", count)
-    while temp_num > 0:
-        left_article = driver.find_element(By.XPATH, "(//div[@class='home-hero-card__image-container'])["+str(temp_num)+"]")
+    count = count - 1
+    while count > 0:
+        left_article = driver.find_element(By.XPATH, "(//div[@class='home-hero-card__image-container'])["+str(count)+"]")
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView();", left_article)
         actions = ActionChains(driver)
         actions.move_to_element(left_article).perform()
         time.sleep(1)
-        temp_num -= 1
-        print("second while loop temp_num :", temp_num)
-    print("after while loop 2, temp_num", temp_num)
+        count -= 1
+        print("second while loop count :", count)
+    print("after while loop 2, temp_num", count)
 
 
 def post_page_load_pop_up():

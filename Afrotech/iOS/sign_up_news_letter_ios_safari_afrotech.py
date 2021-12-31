@@ -1,25 +1,24 @@
 import time
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
-
-url_blavity = "https://afrotech.com/"
+url_afrotech = "https://afrotech.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '14',
+     'os_version': '14',
      'device': 'iPhone 12',
      'real_mobile': 'true',
      'browserstack.local': 'false',
      'browserName': 'safari',
      'browser_version': 'latest',
      'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for afrotech.com in carousel for slide scroll on ios safari',  # test name
-   'build': 'BStack Build Number'
+     'name': 'BStack-[Python] Smoke Test for afrotech.com sign up for news letter working as expected on ios safari',
+     'build': 'BStack Build Number'
 }
 
 desired_cap["chromeOptions"] = {}
@@ -30,7 +29,7 @@ driver = webdriver.Remote(
 
 
 def environment():
-    driver.get(url_blavity)
+    driver.get(url_afrotech)
     time.sleep(5)
     print(driver.title)
 
@@ -41,40 +40,31 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for afrotech.com, for web, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for afrotech.com, for ios safari,'
+          ' took too long but no response, checking title"}}')
         driver.quit()
 
 
-def verify_scroll_carousel():
-    print("function called scroll_carousel")
-    temp = driver.find_elements(By.XPATH, "//div[@class='slick-slide slick-cloned']")
-    print(len(temp))
-    number_of_entries = int((len(temp)-1)/2)
-    print(number_of_entries)
-    count = 1
-    while count < number_of_entries:
-        post_page_load_pop_up()
-        tmp_str = "(//div[@class='hero-card__image-wrapper image-wrapper image-wrapper--16x9'])["+str(count+1)+"]"
-        print(tmp_str)
-        right_article = driver.find_element(By.XPATH, tmp_str)
-        driver.execute_script("arguments[0].scrollIntoView();", right_article)
-        count += 1
-        time.sleep(2)
-        print("slided :", count-1)
-    print("after while loop 1, count", count)
-    count = count - 1
-    while count > 0:
-        post_page_load_pop_up()
-        left_article = driver.find_element(
-          By.XPATH,
-          "(//div[@class='hero-card__image-wrapper image-wrapper image-wrapper--16x9'])["+str(count+1)+"]")
-        driver.execute_script("arguments[0].scrollIntoView();", left_article)
-        actions = ActionChains(driver)
-        actions.move_to_element(left_article).perform()
-        time.sleep(2)
-        count -= 1
-        print("second while loop temp_num :", count)
-    print("after while loop 2, temp_num", count)
+def verify_sign_up():
+    print("in the function verify_signup")
+    sign_up_section = driver.find_element(
+      By.XPATH, "//div[@class='subscribe-dropdown subscribe-dropdown--expanded']")
+    actions = ActionChains(driver)
+    actions.move_to_element(sign_up_section).perform()
+    post_page_load_pop_up()
+    assert sign_up_section.is_displayed(), "Sign Up section is not being displayed"
+    sign_up_text = driver.find_element(By.XPATH, "//h4[normalize-space()='Sign up for our daily Newsletter.']")
+    assert sign_up_text.is_displayed(), "text is not displayed for signup section"
+    post_page_load_pop_up()
+    email = driver.find_element(By.XPATH, "//input[@placeholder='Email Address']")
+    email.send_keys("fortestpurposesonly5@gmail.com")
+    chk_box = driver.find_element(By.XPATH, "//input[@type='checkbox']")
+    chk_box.click()
+    submit_button = driver.find_element(By.XPATH, "//button[normalize-space()='Subscribe']")
+    submit_button.click()
+    WebDriverWait(driver, 40).until(
+      ec.presence_of_element_located((
+        By.XPATH, "//p[@class='subscribe-form__description text-center']")))
 
 
 def post_page_load_pop_up():
@@ -100,13 +90,13 @@ def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", in carousel for slide scroll on ios safari '
-      'for afrotech do work as expected"}}')
+      '{"status":"passed", "reason": ", for ios safari, sign up for news letter section on the '
+      ' afrotech.com do work as expected"}}')
 
 
 environment()
 page_load()
 post_page_load_pop_up()
-verify_scroll_carousel()
+verify_sign_up()
 set_status()
 driver.quit()

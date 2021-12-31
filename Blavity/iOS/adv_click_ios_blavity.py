@@ -42,20 +42,40 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for blavity.com, for web, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for blavity.com, for ios safari, took too long but no response, checking title"}}')
         driver.quit()
 
 
 def verify_adv():
     print("function called verify_adv")
+    time.sleep(2)
+    number_of_entries = driver.find_elements(By.CLASS_NAME, "home-hero-card__title-wrapper")
+    print(len(number_of_entries))
+    # time.sleep(3)
+    WebDriverWait(driver, 5).until(ec.presence_of_element_located((
+      By.TAG_NAME,
+      "iframe")))
     iframe = driver.find_element(
-      By.XPATH,
-      "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[1]/iframe[1]")
-    driver.switch_to.frame(iframe)
-    img = driver.find_element(By.XPATH, "//img[@class='img_ad']")
-    actions = ActionChains(driver)
-    actions.move_to_element(img).perform()
-    img.click()
+      # By.XPATH,
+      # "(//iframe[@id='google_ads_iframe_/11462305847/bla/home_0'])[1]")
+       By.TAG_NAME,
+       "iframe")
+    # driver.execute_script("arguments[0].scrollIntoView();", iframe)
+    # actions = ActionChains(driver)
+    # actions.move_to_element(iframe[0]).perform()
+    time.sleep(1)
+    # iframe[1].click()
+
+    driver.execute_script('''window.open("", "_blank");''')
+
+    driver.execute_script("arguments[0].click();", iframe)
+    time.sleep(2)
+    # driver.switch_to.frame(iframe)
+    # img = driver.find_element(By.XPATH, "//img[@class='img_ad']")
+    # driver.execute_script("arguments[0].scrollIntoView();", img)
+    # actions = ActionChains(driver)
+    # actions.move_to_element(img).perform()
+    # img.click()
     driver.switch_to.window(driver.window_handles[1])
     WebDriverWait(driver, 40).until(ec.presence_of_element_located((By.XPATH, "/html/head/title")))
     print("Current window title: " + driver.title)
@@ -63,7 +83,7 @@ def verify_adv():
     driver.switch_to.window(driver.window_handles[0])
     driver.switch_to.default_content()
     print("initial adv tested")
-    second_iframe = driver.find_element(By.XPATH, "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[6]/div[2]/div[2]/div[1]/div[1]/div[1]/iframe[1]")
+    second_iframe = driver.find_element(By.XPATH, "(//iframe[@id='google_ads_iframe_/11462305847/bla/home_1'])[1]")
     driver.switch_to.frame(second_iframe)
     img_second = driver.find_element(By.XPATH, "//img[@class='img_ad']")
     actions = ActionChains(driver)

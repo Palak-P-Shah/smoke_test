@@ -1,6 +1,4 @@
 import time
-
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -19,12 +17,11 @@ desired_cap = {
   'browserName': 'Chrome',
   'browser_version': 'latest',
   'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for blavity.com in carousel for left and right arrows',  # test name
-   'build': 'BStack Build Number'  # CI/CD job or build name
+   'name': 'BStack-[Python] Smoke Test for blavity.com for differnt search text working as expected or not on android chrome',
+   'build': 'BStack Build Number'
 }
 desired_cap['browserstack.debug'] = True
 desired_cap["chromeOptions"] = {}
-# desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
 driver = webdriver.Remote(
     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
@@ -47,39 +44,8 @@ def page_load():
         driver.quit()
 
 
-def verify_scroll_right(count):
-    temp = 1
-    while temp < (count + 1):
-        print("inside the while temp variable value is ", temp)
-        right_article = driver.find_element(By.XPATH, "(//div[@class='home-hero-card__image-container'])["+str(temp)+"]")
-        actions = ActionChains(driver)
-        actions.move_to_element(right_article).perform()
-        time.sleep(1)
-        temp += 1
-        print("clicked the right icon number of times :- ", temp)
-
-
-def verify_scroll_carousel():
-    print("function called scroll_carousel")
-    number_of_entries = driver.find_elements(By.CLASS_NAME, "home-hero-card__title-wrapper")
-    count = 0
-    temp_num = len(number_of_entries)
-    while count < len(number_of_entries):
-        verify_scroll_right(count)
-        count += 1
-    print("after while loop 1, count", count)
-    while temp_num > 0:
-        left_article = driver.find_element(By.XPATH, "(//div[@class='home-hero-card__image-container'])["+str(temp_num)+"]")
-        actions = ActionChains(driver)
-        actions.move_to_element(left_article).perform()
-        time.sleep(1)
-        temp_num -= 1
-        print("second while loop temp_num :", temp_num)
-    print("after while loop 2, temp_num", temp_num)
-
-
 def post_page_load_pop_up():
-    print("close popups in mobile view")
+    print("accept popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -92,17 +58,38 @@ def post_page_load_pop_up():
         print("blavity footer pop-up does not exist")
 
 
-def set_status():
-    print("Function called set Status")
-    driver.execute_script(
-      'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for android on chrome browser, in carousel left and right arrow '
-      'Links for blavity do work as expected"}}')
+def verify_nav_search_bar(input):
+    search_bar = driver.find_element(
+      By.CSS_SELECTOR,
+      "button[class='btn btn--search bg-transparent border-0 text-right text-white position-absolute']")
+    assert search_bar.is_displayed(), "Search Bar is not displayed"
+    search_bar.click()
+    input_search = driver.find_element(By.XPATH, "//input[@type='text']")
+    search_text = input
+    input_search.send_keys(search_text)
+    search_bar.click()
+    if input == 'culture':
+        WebDriverWait(driver, 40).until(ec.url_contains(search_text))
+        WebDriverWait(driver, 40).until(ec.title_is("Search - Blavity News"))
+        assert driver.title == "Search - Blavity News", "title text does not match for search page"
+        print("Current window title for Search Page is: " + driver.title)
+        print("link for Search is present and working as expected")
+        driver.execute_script(
+          'browserstack_executor: {"action": "setSessionStatus", "arguments": '
+          '{"status":"passed", "reason": ", for android chrome, for the search text culture on '
+          ' blavity.com do work as expected."}}')
+    elif input == 'Yolanda Baruch':
+        WebDriverWait(driver, 40).until(ec.title_is("The Community for Black Creativity and News - Blavity News"))
+        print("Current window title for Search Page is: " + driver.title)
+        driver.execute_script(
+          'browserstack_executor: {"action": "setSessionStatus", "arguments": '
+          '{"status":"failed", "reason": ", for android chrome, for search text Yolanda Baruch on'
+          ' blavity.com giving error as page not found."}}')
 
 
 environment()
 page_load()
 post_page_load_pop_up()
-verify_scroll_carousel()
-set_status()
+verify_nav_search_bar("culture")
+verify_nav_search_bar("Yolanda Baruch")
 driver.quit()

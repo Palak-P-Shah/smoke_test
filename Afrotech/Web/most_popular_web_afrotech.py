@@ -7,7 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
 
-url_blavity = "https://afrotech.com/"
+url_afrotech = "https://afrotech.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -29,7 +29,7 @@ driver = webdriver.Remote(
 
 def environment():
     driver.maximize_window()
-    driver.get(url_blavity)
+    driver.get(url_afrotech)
     time.sleep(5)
     print(driver.title)
 
@@ -82,7 +82,7 @@ def verify_most_popular():
 
 
 def post_page_load_pop_up():
-    print("accept popups in web view")
+    print("close popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()

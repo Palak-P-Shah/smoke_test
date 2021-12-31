@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_afrotech = "https://afrotech.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -15,11 +15,13 @@ desired_cap = {
    'browser': 'Chrome',
    'browser_version': '94.0',
    'os': 'Windows',
-   'name': 'BStack-[Python] Smoke Test on desktop for afrotech.com in carousel for left and right arrows',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+           'carousel for left and right arrows',  # test name
    'build': 'BStack Build Number'
 }
-
+# desired_cap['browserstack.debug'] = True
 desired_cap["chromeOptions"] = {}
+# desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
 driver = webdriver.Remote(
     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
@@ -28,53 +30,54 @@ driver = webdriver.Remote(
 
 def environment():
     driver.maximize_window()
-    driver.get(url_afrotech)
+    driver.get(url_shadowandact)
     time.sleep(5)
     print(driver.title)
 
 
 def page_load():
     try:
-        WebDriverWait(driver, 40).until(ec.title_is("AfroTech"))
+        WebDriverWait(driver, 40).until(ec.title_is("SHADOW & ACT"))
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for afrotech.com, for web, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for shadowandact.com, for web, '
+          'took too long but no response, checking title"}}')
         driver.quit()
 
 
 def verify_scroll_carousel():
     print("function called scroll_carousel")
-    number_of_entries = driver.find_elements(By.XPATH, "//div[@class='slick-slide slick-cloned']")
-    assert len(number_of_entries) > 0, "articles are not present in carousel"
-    print("number of entries in Carousel are :- ", len(number_of_entries) - 1)
-    left_click_button = driver.find_element(By.XPATH, "//button[contains(text(),'Previous')]")
+    temp_number = driver.find_elements(By.XPATH, "(//a[@class='article-link home-hero-card__image__link'])")
+    number_of_entries = int((int(len(temp_number)-1)/2))
+    assert number_of_entries > 0, "articles are not present in carousel"
+    print("number of entries in Carousel are :- ", number_of_entries)
+    left_click_button = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[1]")
     assert left_click_button.is_displayed(), "left click arrow button is not displayed in carousel"
-    right_click_button = driver.find_element(By.XPATH, "//button[normalize-space()='Next']")
+    right_click_button = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[2]")
     assert right_click_button.is_displayed(), "right click arrow button is not displayed in carousel"
     if left_click_button.is_displayed() and right_click_button.is_displayed():
         print("both right and left click buttons are displayed on this page")
-    count = 0
-    temp_num = len(number_of_entries) - 1
-    while count < (temp_num - 1):
+    count = 1
+    while count < number_of_entries:
         time.sleep(1)
-        post_page_load_pop_up()
-        right_arrow = driver.find_element(By.XPATH, "//button[normalize-space()='Next']")
+        right_arrow = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[2]")
         right_arrow.click()
+        print("clicked :", count)
         count += 1
-        print("clicked next :", count)
     print("after while loop 1, count", count)
-    while (temp_num-1) > 0:
-        left_arrow = driver.find_element(By.XPATH, "//button[contains(text(),'Previous')]")
+    count = count - 1
+    while count > 0:
+        left_arrow = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[1]")
         left_arrow.click()
         time.sleep(1)
-        temp_num -= 1
-        print("second while loop clicked :", temp_num)
-    print("after while loop 2, temp_num", temp_num)
+        count -= 1
+        print("second while loop temp_num :", count)
+    print("after while loop 2, temp_num", count)
 
 
 def post_page_load_pop_up():
-    print("close popups in web view")
+    print("accept popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -84,7 +87,7 @@ def post_page_load_pop_up():
         footer_xpath = driver.find_element(By.XPATH, "//button[text()='Accept']")
         driver.execute_script("arguments[0].click();", footer_xpath)
     except NoSuchElementException:
-        print("afrotech footer pop-up does not exist")
+        print("shadowandact cookies footer pop-up does not exist")
 
 
 def set_status():
@@ -92,7 +95,7 @@ def set_status():
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
       '{"status":"passed", "reason": ", for desktop, in carousel left and right arrow '
-      'Links for afrotech do work as expected"}}')
+      'Links for shadowandact do work as expected"}}')
 
 
 environment()

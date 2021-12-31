@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_blavity = "https://afrotech.com/"
+url_afrotech = "https://afrotech.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -19,11 +19,10 @@ desired_cap = {
     'browser_version': 'latest',
     'os': 'Android',
      'name': 'BStack-[Python] Smoke Test for afrotech.com on Android Chrome for Most Popular Section',
-     'build': 'BStack Build Number'  # CI/CD job or build name
+     'build': 'BStack Build Number'
 }
-desired_cap['browserstack.debug'] = True
+
 desired_cap["chromeOptions"] = {}
-# desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
 driver = webdriver.Remote(
     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
@@ -31,7 +30,7 @@ driver = webdriver.Remote(
 
 
 def environment():
-    driver.get(url_blavity)
+    driver.get(url_afrotech)
     time.sleep(5)
     print(driver.title)
 
@@ -47,7 +46,7 @@ def page_load():
 
 
 def post_page_load_pop_up():
-    print("accept popups in web view")
+    print("close popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
