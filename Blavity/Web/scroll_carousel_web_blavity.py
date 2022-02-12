@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 options = Options()
 options.headless = False
 options.add_argument("--disable-notifications")
-url_blavity = "https://blavity.com/"
+url_blavity = "https://staging.blavity.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {

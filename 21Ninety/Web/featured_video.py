@@ -16,7 +16,7 @@ desired_cap = {
    'browser': 'Chrome',
    'browser_version': '94.0',
    'os': 'Windows',
-   'name': 'BStack-[Python] Smoke Test for 21ninety.com featured section is as expected or not on desktop',
+   'name': 'BStack-[Python] Smoke Test for 21ninety.com featured video is as expected or not on desktop',
    'build': 'BStack Build Number'
 }
 
@@ -45,54 +45,22 @@ def page_load():
 
 
 def verify_featured():
-    print("in the function verify_featured section")
-    featured = driver.find_element(By.XPATH, "//h2[normalize-space()='Featured']")
+    print("in the function verify_featured")
+    featured = driver.find_element(By.XPATH, "//h3[normalize-space()='FEATURED VIDEOS']")
     actions = ActionChains(driver)
     actions.move_to_element(featured).perform()
     assert featured.is_displayed(), "'Featured' heading is not displayed"
-    tmp = driver.find_elements(By.XPATH, "(//div[@class='featured-article-card d-flex flex-column position-relative'])")
-    temp_articles = int(len(tmp)/3)
-    assert temp_articles > 0 , "No articles are present under Featured section"
+    tmp = driver.find_elements(
+      By.XPATH,
+      "(//button[@class='video-card__play btn bg-white border-circle border-0 font-size-0 p-0 text-teal'])")
+    temp_articles = len(tmp)
+    assert temp_articles > 0 , "No videos are present under Featured videos section"
     print(temp_articles)
-    count = 7
-    while count < 13:
-        temp_string = str(count)
-        print("count : ", count)
-        print("tempString : ", temp_string)
-        temp_xpath = "(//div[@class='featured-article-card__content bg-white d-flex " \
-                     "flex-column flex-full position-absolute']//div[1]//a[1])[" + temp_string + "]"
-        WebDriverWait(driver, 5).until(
-          ec.presence_of_element_located((
-            By.XPATH, temp_xpath)))
-        time.sleep(1)
-        article_heading = driver.find_element(By.XPATH, temp_xpath)
-        # driver.execute_script("arguments[0].scrollIntoView();", article_heading)
-        actions = ActionChains(driver)
-        actions.move_to_element(article_heading).perform()
-        article = article_heading.get_attribute("title")
-        print("article is :", article)
-        temp_heading = article + " - 21Ninety"
-        driver.execute_script("arguments[0].click();", article_heading)
-        print("clicked on article heading")
-        WebDriverWait(driver, 5).until(ec.title_is(temp_heading))
-        try:
-            adv = driver.find_element(By.XPATH, "//button[@class='ub-emb-close']")
-            driver.execute_script("arguments[0].click();", adv)
-        except NoSuchElementException:
-            print("21ninety adv pop-up does not exist")
-        print("Current window title: " + driver.title)
-        temp_str = driver.title
-        temp = temp_str.split(' -')
-        compare_1 = str(temp[0])
-        compare_2 = article
-        print("deduced string is :", compare_1)
-        print("text string is :", compare_2)
-        assert compare_1 == compare_2, "for 'Most Popular' section, for " \
-                                       + article + ": article , title text does not match"
-        driver.back()
-        time.sleep(1)
-        WebDriverWait(driver, 5).until(ec.title_is("21Ninety"))
-        count += 1
+    video = driver.find_element(
+      By.XPATH,
+      "(//button[@class='video-card__play btn bg-white border-circle border-0 font-size-0 p-0 text-teal'])[1]")
+    video.click()
+    time.sleep(5)
 
 
 def post_page_load_pop_up():
@@ -113,7 +81,7 @@ def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for desktop, on 21ninety.com featured section do work as expected"}}')
+      '{"status":"passed", "reason": ", for desktop, on 21ninety.com featured video do work as expected"}}')
 
 
 environment()

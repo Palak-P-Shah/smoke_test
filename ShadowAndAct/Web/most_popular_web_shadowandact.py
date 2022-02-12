@@ -62,7 +62,7 @@ def verify_most_popular():
         element = driver.find_element(By.XPATH, "//div[@class='flex-full']//li[" + temp_string + "]")
         time.sleep(1)
         temp_xpath = "//div[@class='flex-full']//li["+temp_string+"]//a[1]"
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 40).until(
           ec.presence_of_element_located((
             By.XPATH, temp_xpath)))
         time.sleep(1)
@@ -75,8 +75,8 @@ def verify_most_popular():
         driver.execute_script("arguments[0].click();", article_heading)
         #     time.sleep(3)
         print("clicked on article heading")
-        WebDriverWait(driver, 5).until(ec.title_is(temp_heading))
-        # time.sleep(2)
+        WebDriverWait(driver, 10).until(ec.title_is(temp_heading))
+        # time.sleep(3)
         print("Current window title: " + driver.title)
         temp_str = driver.title
         temp = temp_str.split(' -')

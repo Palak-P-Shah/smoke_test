@@ -58,6 +58,7 @@ def verify_top_stories():
     while count < number:
         temp_string = str(count + 1)
         temp_xpath = "//div[@class='page-home__content']//li["+str(temp_string)+"]/div[1]/div[2]/div[1]/a[1]"
+        WebDriverWait(driver, 40).until(ec.presence_of_element_located((By.XPATH, temp_xpath)))
         b = driver.find_element(By.XPATH, temp_xpath)
         compare_1 = str(b.text)
         assert b.is_displayed(), "particular side bar top story is not present"
@@ -65,8 +66,9 @@ def verify_top_stories():
         top_story_link_url = b.get_attribute('href')
         if (top_story_link_url is None) or (top_story_link_url == ""):
             print("particular top story link is not there")
+        tmp = b.text
         b.click()
-        WebDriverWait(driver, 40).until(ec.title_contains("Blavity"))
+        WebDriverWait(driver, 40).until(ec.title_contains(tmp))
         print("Current top story window title: " + driver.title)
         temp_str = driver.title
         temp = temp_str.split(' -')

@@ -3,41 +3,57 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
+options = Options()
+options.headless = False
+options.add_argument("--disable-notifications")
+options.add_argument('--start-maximized')
+# options.add_argument("--headless")
+options.add_argument("--window-size=1920x1080")
+
+user_agent = \
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 PTST/1.0'
+options.add_argument('user-agent={0}'.format(user_agent))
 
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_podcast = "https://html5-player.libsyn.com/embed/episode/id/21613013/height/360/theme/legacy/thumbnail/yes/direction/backward/?wmode=opaque"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-    'os_version': '14',
+  'os_version': '14',
   'device': 'iPhone 12',
   'real_mobile': 'true',
   'browserstack.local': 'false',
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-    'name': 'BStack-[Python] Smoke Test for shadowandact.com for different '
-            'search text working as expected or not on ios safari',
-    'build': 'BStack Build Number'
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com for podcast is as expected on ios safari',
+   'build': 'BStack Build Number'
 }
-desired_cap['browserstack.debug'] = True
+
 desired_cap["chromeOptions"] = {}
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
 driver = webdriver.Remote(
     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
     desired_capabilities=desired_cap)
+# driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 
 def environment():
-    driver.get(url_shadowandact)
+    # driver.maximize_window()
+    driver.get(url_podcast)
     time.sleep(5)
     print(driver.title)
 
 
 def page_load():
     try:
-        WebDriverWait(driver, 40).until(ec.title_is("SHADOW & ACT"))
+        WebDriverWait(driver, 20).until(ec.title_is("SHADOW & ACT"))
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
@@ -46,8 +62,17 @@ def page_load():
         driver.quit()
 
 
+def verify_podcast():
+    print("in the function verify_podcast")
+    play = driver.find_element(By.XPATH, "//i[@class='play center-block fa fa-play-circle-o']")
+    actions = ActionChains(driver)
+    actions.move_to_element(play).perform()
+    play.click()
+    time.sleep(3)
+
+
 def post_page_load_pop_up():
-    print("close popups in mobile view")
+    print("accept popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -58,42 +83,18 @@ def post_page_load_pop_up():
         driver.execute_script("arguments[0].click();", footer_xpath)
     except NoSuchElementException:
         print("shadowandact footer cookies pop-up does not exist")
-    try:
-        footer_adv = driver.find_element(By.XPATH, "//img[@alt='close button']")
-        driver.execute_script("arguments[0].click();", footer_adv)
-    except NoSuchElementException:
-        print("shadowandact footer adv does not exist")
 
 
-def verify_nav_search_bar(search_text):
-    search_bar = driver.find_element(
-      By.XPATH,
-      "//button[@type='submit']")
-    assert search_bar.is_displayed(), "Search Bar is not displayed"
-    search_bar.click()
-    time.sleep(1)
-    input_search = driver.find_element(By.XPATH, "//input[@type='text']")
-    input_search.send_keys(search_text)
-    search_bar.click()
-    WebDriverWait(driver, 10).until(ec.title_is("Search - SHADOW & ACT"))
-    assert driver.title == "Search - SHADOW & ACT", "title text does not match for search page"
-    print("Current window title for Search Page is: " + driver.title)
-    print("link for Search is present and working as expected")
+def set_status():
+    print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for ios safari, for the search text : ' + search_text +
-      ' on shadowandact.com do work as expected."}}')
-    main_page = driver.find_element(
-      By.XPATH,
-      "//a[@class='navbar-brand d-inline-block nuxt-link-active']")
-    main_page.click()
-    time.sleep(1)
-    WebDriverWait(driver, 10).until(ec.title_is("SHADOW & ACT"))
+      '{"status":"passed", "reason": ", for ios safari, on shadowandact.com podcast do work as expected"}}')
 
 
 environment()
-page_load()
+# page_load()
 post_page_load_pop_up()
-verify_nav_search_bar("culture")
-verify_nav_search_bar("Yolanda Baruch")
+verify_podcast()
+set_status()
 driver.quit()

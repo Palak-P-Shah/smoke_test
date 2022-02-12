@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_shadowandact = "https://shadowandact.com/"
+url_shadowandact = "https://staging.shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {

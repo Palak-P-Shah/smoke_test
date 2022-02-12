@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_21ninety = "https://21ninety.com/"
+url_21ninety = "https://staging.21ninety.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {

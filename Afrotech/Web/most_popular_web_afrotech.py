@@ -7,7 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
 
-url_afrotech = "https://afrotech.com/"
+url_afrotech = "https://staging.afrotech.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -71,9 +71,10 @@ def verify_most_popular():
         temp_str = driver.title
         temp = temp_str.split(' -')
         compare_2 = str(temp[0])
-        assert compare_1 == compare_2, "for side bar top stories, for this particular article :" + driver.title + " :story, the text does not match"
         print("deduced string is :", compare_1)
         print("text string is :", compare_2)
+        assert compare_1 == compare_2, "for side bar top stories, for this particular article :" \
+                                       + driver.title + " :story, the text does not match"
         driver.back()
         WebDriverWait(driver, 20).until(ec.title_is("AfroTech"))
         count += 1
