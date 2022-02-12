@@ -75,7 +75,7 @@ def verify_most_popular():
         driver.execute_script("arguments[0].click();", article_heading)
         #     time.sleep(3)
         print("clicked on article heading")
-        WebDriverWait(driver, 10).until(ec.title_is(temp_heading))
+        WebDriverWait(driver, 40).until(ec.title_is(temp_heading))
         # time.sleep(3)
         print("Current window title: " + driver.title)
         temp_str = driver.title
@@ -90,7 +90,7 @@ def verify_most_popular():
         time.sleep(1)
         #     # driver.back()
         #     driver.execute_script("window.history.go(-1)")
-        WebDriverWait(driver, 5).until(ec.title_is("SHADOW & ACT"))
+        WebDriverWait(driver, 40).until(ec.title_is("SHADOW & ACT"))
         # time.sleep(2)
         count += 1
 
