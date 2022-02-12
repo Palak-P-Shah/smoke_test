@@ -7,7 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -63,7 +63,7 @@ def verify_most_popular():
         element = driver.find_element(By.XPATH, "//div[@class='flex-full']//li[" + temp_string + "]")
         time.sleep(1)
         temp_xpath = "//div[@class='flex-full']//li["+temp_string+"]//a[1]"
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 40).until(
           ec.presence_of_element_located((
             By.XPATH, temp_xpath)))
         time.sleep(1)
