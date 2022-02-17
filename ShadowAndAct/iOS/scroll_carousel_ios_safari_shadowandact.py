@@ -17,7 +17,7 @@ desired_cap = {
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right slides for ios safari',  # test name
    'build': 'BStack Build Number'
 }
@@ -41,7 +41,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for shadowandact.com, for ios safari, '
+          '{"status":"failed", "reason": for staging.shadowandact.com, for ios safari, '
           'took too long but no response, checking title"}}')
         driver.quit()
 
@@ -105,7 +105,7 @@ def set_status():
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
       '{"status":"passed", "reason": ", for ios safari, in carousel left and right slides '
-      'for shadowandact do work as expected"}}')
+      'for staging.shadowandact do work as expected"}}')
 
 
 environment()

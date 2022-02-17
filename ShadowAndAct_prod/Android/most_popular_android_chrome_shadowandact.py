@@ -7,16 +7,18 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '10',
-   'resolution': '1920x1080',
-   'browser': 'Chrome',
-   'browser_version': '94.0',
-   'os': 'Windows',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com most popular section is as expected on desktop',
+   'os_version': '10.0',
+  'device': 'Google Pixel 3',
+  'real_mobile': 'true',
+  'browserstack.local': 'false',
+  'browserName': 'Chrome',
+  'browser_version': 'latest',
+  'os': 'Android',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com most popular section is as expected on android chrome',
    'build': 'BStack Build Number'
 }
 
@@ -28,7 +30,6 @@ driver = webdriver.Remote(
 
 
 def environment():
-    driver.maximize_window()
     driver.get(url_shadowandact)
     time.sleep(5)
     print(driver.title)
@@ -40,7 +41,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for staging.shadowandact.com, for web, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for shadowandact.com, for android chrome, took too long but no response, checking title"}}')
         driver.quit()
 
 
@@ -75,8 +76,8 @@ def verify_most_popular():
         driver.execute_script("arguments[0].click();", article_heading)
         #     time.sleep(3)
         print("clicked on article heading")
-        WebDriverWait(driver, 40).until(ec.title_is(temp_heading))
-        # time.sleep(3)
+        WebDriverWait(driver, 5).until(ec.title_is(temp_heading))
+        # time.sleep(2)
         print("Current window title: " + driver.title)
         temp_str = driver.title
         temp = temp_str.split(' -')
@@ -90,13 +91,13 @@ def verify_most_popular():
         time.sleep(1)
         #     # driver.back()
         #     driver.execute_script("window.history.go(-1)")
-        WebDriverWait(driver, 40).until(ec.title_is("SHADOW & ACT"))
+        WebDriverWait(driver, 5).until(ec.title_is("SHADOW & ACT"))
         # time.sleep(2)
         count += 1
 
 
 def post_page_load_pop_up():
-    print("accept popups in web view")
+    print("close popups in mobile view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -107,13 +108,17 @@ def post_page_load_pop_up():
         driver.execute_script("arguments[0].click();", footer_xpath)
     except NoSuchElementException:
         print("shadowandact footer cookies pop-up does not exist")
-
+    try:
+        footer_adv = driver.find_element(By.XPATH, "//img[@alt='close button']")
+        driver.execute_script("arguments[0].click();", footer_adv)
+    except NoSuchElementException:
+        print("shadowandact footer adv does not exist")
 
 def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for desktop, on staging.shadowandact.com Most Popular section do work as expected"}}')
+      '{"status":"passed", "reason": ", for android chrome, on shadowandact.com Most Popular section do work as expected"}}')
 
 
 environment()

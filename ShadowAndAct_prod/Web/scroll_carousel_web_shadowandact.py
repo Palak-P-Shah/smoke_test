@@ -4,21 +4,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
-from selenium.webdriver import ActionChains
 
-url_shadowandact = "https://staging.shadowandact.com/"
+
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '10.0',
-    'device': 'Google Pixel 3',
-    'real_mobile': 'true',
-    'browserstack.local': 'false',
-    'browserName': 'Chrome',
-    'browser_version': 'latest',
-    'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
-           'carousel for left and right slides',  # test name
+   'os_version': '10',
+   'resolution': '1920x1080',
+   'browser': 'Chrome',
+   'browser_version': '94.0',
+   'os': 'Windows',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+           'carousel for left and right arrows',  # test name
    'build': 'BStack Build Number'
 }
 # desired_cap['browserstack.debug'] = True
@@ -31,6 +29,7 @@ driver = webdriver.Remote(
 
 
 def environment():
+    driver.maximize_window()
     driver.get(url_shadowandact)
     time.sleep(5)
     print(driver.title)
@@ -38,11 +37,11 @@ def environment():
 
 def page_load():
     try:
-        WebDriverWait(driver, 10).until(ec.title_is("SHADOW & ACT"))
+        WebDriverWait(driver, 40).until(ec.title_is("SHADOW & ACT"))
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for staging.shadowandact.com, for android chrome, '
+          '{"status":"failed", "reason": for shadowandact.com, for web, '
           'took too long but no response, checking title"}}')
         driver.quit()
 
@@ -59,21 +58,18 @@ def verify_scroll_carousel():
     assert right_click_button.is_displayed(), "right click arrow button is not displayed in carousel"
     if left_click_button.is_displayed() and right_click_button.is_displayed():
         print("both right and left click buttons are displayed on this page")
-    temp = 13
-    count = 8
-    while count < temp:
+    count = 1
+    while count < number_of_entries:
         time.sleep(1)
-        right_slide = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
-        actions = ActionChains(driver)
-        actions.move_to_element(right_slide).perform()
-        print("slided :", count-6)
+        right_arrow = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[2]")
+        right_arrow.click()
+        print("clicked :", count)
         count += 1
     print("after while loop 1, count", count)
     count = count - 1
-    while count > 7:
-        left_arrow = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
-        actions = ActionChains(driver)
-        actions.move_to_element(left_arrow).perform()
+    while count > 0:
+        left_arrow = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[1]")
+        left_arrow.click()
         time.sleep(1)
         count -= 1
         print("second while loop temp_num :", count)
@@ -81,7 +77,7 @@ def verify_scroll_carousel():
 
 
 def post_page_load_pop_up():
-    print("close popups in web view")
+    print("accept popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -92,19 +88,14 @@ def post_page_load_pop_up():
         driver.execute_script("arguments[0].click();", footer_xpath)
     except NoSuchElementException:
         print("shadowandact cookies footer pop-up does not exist")
-    try:
-        footer_adv = driver.find_element(By.XPATH, "//img[@alt='close button']")
-        driver.execute_script("arguments[0].click();", footer_adv)
-    except NoSuchElementException:
-        print("shadowandact footer adv does not exist")
 
 
 def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for android chrome, in carousel left and right slides '
-      'for staging.shadowandact do work as expected"}}')
+      '{"status":"passed", "reason": ", for desktop, in carousel left and right arrow '
+      'Links for shadowandact do work as expected"}}')
 
 
 environment()

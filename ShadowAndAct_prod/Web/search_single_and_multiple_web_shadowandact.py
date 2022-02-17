@@ -6,20 +6,17 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-    'os_version': '14',
-  'device': 'iPhone 12',
-  'real_mobile': 'true',
-  'browserstack.local': 'false',
-  'browserName': 'safari',
-  'browser_version': 'latest',
-  'os': 'iOS',
-    'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for different '
-            'search text working as expected or not on ios safari',
-    'build': 'BStack Build Number'
+   'os_version': '10',
+   'resolution': '1920x1080',
+   'browser': 'Chrome',
+   'browser_version': '94.0',
+   'os': 'Windows',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com for different search text working as expected or not on desktop',
+   'build': 'BStack Build Number'
 }
 desired_cap['browserstack.debug'] = True
 desired_cap["chromeOptions"] = {}
@@ -30,6 +27,7 @@ driver = webdriver.Remote(
 
 
 def environment():
+    driver.maximize_window()
     driver.get(url_shadowandact)
     time.sleep(5)
     print(driver.title)
@@ -41,13 +39,12 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for staging.shadowandact.com, for ios safari, '
-          'took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for shadowandact.com, for web, took too long but no response, checking title"}}')
         driver.quit()
 
 
 def post_page_load_pop_up():
-    print("close popups in mobile view")
+    print("close popups in web view")
     try:
         btn_close = driver.find_element(By.XPATH, "(//button[@type='button'][normalize-space()='×'])[1]")
         btn_close.click()
@@ -58,21 +55,16 @@ def post_page_load_pop_up():
         driver.execute_script("arguments[0].click();", footer_xpath)
     except NoSuchElementException:
         print("shadowandact footer cookies pop-up does not exist")
-    try:
-        footer_adv = driver.find_element(By.XPATH, "//img[@alt='close button']")
-        driver.execute_script("arguments[0].click();", footer_adv)
-    except NoSuchElementException:
-        print("shadowandact footer adv does not exist")
 
 
-def verify_nav_search_bar(search_text):
+def verify_nav_search_bar(input):
     search_bar = driver.find_element(
       By.XPATH,
       "//button[@type='submit']")
     assert search_bar.is_displayed(), "Search Bar is not displayed"
     search_bar.click()
-    time.sleep(1)
     input_search = driver.find_element(By.XPATH, "//input[@type='text']")
+    search_text = input
     input_search.send_keys(search_text)
     search_bar.click()
     WebDriverWait(driver, 10).until(ec.title_is("Search - SHADOW & ACT"))
@@ -81,8 +73,8 @@ def verify_nav_search_bar(search_text):
     print("link for Search is present and working as expected")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for ios safari, for the search text : ' + search_text +
-      ' on staging.shadowandact.com do work as expected."}}')
+      '{"status":"passed", "reason": ", for desktop, for the search text : '+search_text+
+      ' on shadowandact.com do work as expected."}}')
     main_page = driver.find_element(
       By.XPATH,
       "//a[@class='navbar-brand d-inline-block nuxt-link-active']")

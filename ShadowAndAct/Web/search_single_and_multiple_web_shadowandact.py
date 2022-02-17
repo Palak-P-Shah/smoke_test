@@ -15,7 +15,7 @@ desired_cap = {
    'browser': 'Chrome',
    'browser_version': '94.0',
    'os': 'Windows',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com for different search text working as expected or not on desktop',
+   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for different search text working as expected or not on desktop',
    'build': 'BStack Build Number'
 }
 desired_cap['browserstack.debug'] = True
@@ -39,7 +39,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for shadowandact.com, for web, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for staging.shadowandact.com, for web, took too long but no response, checking title"}}')
         driver.quit()
 
 
@@ -74,7 +74,7 @@ def verify_nav_search_bar(input):
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
       '{"status":"passed", "reason": ", for desktop, for the search text : '+search_text+
-      ' on shadowandact.com do work as expected."}}')
+      ' on staging.shadowandact.com do work as expected."}}')
     main_page = driver.find_element(
       By.XPATH,
       "//a[@class='navbar-brand d-inline-block nuxt-link-active']")

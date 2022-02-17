@@ -6,24 +6,23 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '10.0',
-    'device': 'Google Pixel 3',
-    'real_mobile': 'true',
-    'browserstack.local': 'false',
-    'browserName': 'Chrome',
-    'browser_version': 'latest',
-    'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
-           'carousel for left and right slides',  # test name
+   'os_version': '14',
+  'device': 'iPhone 12',
+  'real_mobile': 'true',
+  'browserstack.local': 'false',
+  'browserName': 'safari',
+  'browser_version': 'latest',
+  'os': 'iOS',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+           'carousel for left and right slides for ios safari',  # test name
    'build': 'BStack Build Number'
 }
-# desired_cap['browserstack.debug'] = True
+
 desired_cap["chromeOptions"] = {}
-# desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
 driver = webdriver.Remote(
     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
@@ -42,7 +41,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for staging.shadowandact.com, for android chrome, '
+          '{"status":"failed", "reason": for shadowandact.com, for ios safari, '
           'took too long but no response, checking title"}}')
         driver.quit()
 
@@ -50,7 +49,7 @@ def page_load():
 def verify_scroll_carousel():
     print("function called scroll_carousel")
     temp_number = driver.find_elements(By.XPATH, "(//a[@class='article-link home-hero-card__image__link'])")
-    number_of_entries = int((int(len(temp_number)-1)/2))
+    number_of_entries = int(len(temp_number)/3)
     assert number_of_entries > 0, "articles are not present in carousel"
     print("number of entries in Carousel are :- ", number_of_entries)
     left_click_button = driver.find_element(By.XPATH, "//div[@class='home-hero-slider position-relative']//button[1]")
@@ -63,17 +62,19 @@ def verify_scroll_carousel():
     count = 8
     while count < temp:
         time.sleep(1)
-        right_slide = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
+        # right_slide = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
         actions = ActionChains(driver)
-        actions.move_to_element(right_slide).perform()
+        actions.move_to_element(right_click_button).perform()
+        right_click_button.click()
         print("slided :", count-6)
         count += 1
     print("after while loop 1, count", count)
     count = count - 1
     while count > 7:
-        left_arrow = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
+        # left_arrow = driver.find_element(By.XPATH, "(//div[@class='home-hero-card position-relative'])["+str(count)+"]")
         actions = ActionChains(driver)
-        actions.move_to_element(left_arrow).perform()
+        actions.move_to_element(left_click_button).perform()
+        left_click_button.click()
         time.sleep(1)
         count -= 1
         print("second while loop temp_num :", count)
@@ -103,8 +104,8 @@ def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for android chrome, in carousel left and right slides '
-      'for staging.shadowandact do work as expected"}}')
+      '{"status":"passed", "reason": ", for ios safari, in carousel left and right slides '
+      'for shadowandact do work as expected"}}')
 
 
 environment()

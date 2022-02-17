@@ -6,19 +6,19 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium import webdriver
 
 
-url_shadowandact = "https://staging.shadowandact.com/"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-    'os_version': '14',
-  'device': 'iPhone 12',
-  'real_mobile': 'true',
-  'browserstack.local': 'false',
-  'browserName': 'safari',
-  'browser_version': 'latest',
-  'os': 'iOS',
-    'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for different '
-            'search text working as expected or not on ios safari',
+    'os_version': '10.0',
+    'device': 'Google Pixel 3',
+    'real_mobile': 'true',
+    'browserstack.local': 'false',
+    'browserName': 'Chrome',
+    'browser_version': 'latest',
+    'os': 'Android',
+    'name': 'BStack-[Python] Smoke Test for shadowandact.com for different '
+            'search text working as expected or not on android chrome',
     'build': 'BStack Build Number'
 }
 desired_cap['browserstack.debug'] = True
@@ -41,7 +41,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for staging.shadowandact.com, for ios safari, '
+          '{"status":"failed", "reason": for shadowandact.com, for android chrome, '
           'took too long but no response, checking title"}}')
         driver.quit()
 
@@ -81,8 +81,8 @@ def verify_nav_search_bar(search_text):
     print("link for Search is present and working as expected")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for ios safari, for the search text : ' + search_text +
-      ' on staging.shadowandact.com do work as expected."}}')
+      '{"status":"passed", "reason": ", for android chrome, for the search text : ' + search_text +
+      ' on shadowandact.com do work as expected."}}')
     main_page = driver.find_element(
       By.XPATH,
       "//a[@class='navbar-brand d-inline-block nuxt-link-active']")

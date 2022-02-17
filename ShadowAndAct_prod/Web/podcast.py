@@ -21,18 +21,16 @@ user_agent = \
 options.add_argument('user-agent={0}'.format(user_agent))
 
 
-url_podcast = "https://html5-player.libsyn.com/embed/episode/id/21613013/height/360/theme/legacy/thumbnail/yes/direction/backward/?wmode=opaque"
+url_shadowandact = "https://shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-  'os_version': '14',
-  'device': 'iPhone 12',
-  'real_mobile': 'true',
-  'browserstack.local': 'false',
-  'browserName': 'safari',
-  'browser_version': 'latest',
-  'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for podcast is as expected on ios safari',
+   'os_version': '10',
+   'resolution': '1920x1080',
+   'browser': 'Chrome',
+   'browser_version': '94.0',
+   'os': 'Windows',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com for podcast is as expected on desktop',
    'build': 'BStack Build Number'
 }
 
@@ -45,8 +43,8 @@ driver = webdriver.Remote(
 
 
 def environment():
-    # driver.maximize_window()
-    driver.get(url_podcast)
+    driver.maximize_window()
+    driver.get(url_shadowandact)
     time.sleep(5)
     print(driver.title)
 
@@ -57,18 +55,63 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for shadowandact.com, for ios safari, '
+          '{"status":"failed", "reason": for shadowandact.com, for web, '
           'took too long but no response, checking title"}}')
         driver.quit()
 
 
 def verify_podcast():
     print("in the function verify_podcast")
+    podcast = driver.find_element(By.XPATH, "//a[normalize-space()='PODCAST']")
+    actions = ActionChains(driver)
+    actions.move_to_element(podcast).perform()
+    assert podcast.is_displayed(), "'PODCAST' heading is not displayed"
+    podcast.click()
+    # switch to the new tab being opened.
+    driver.switch_to.window(driver.window_handles[1])
+    WebDriverWait(driver, 10).until(ec.title_is("Opening Act Podcast"))
+    assert "Opening Act Podcast" in driver.title, "title of podcast website does not match"
+    time.sleep(2)
+    # WebDriverWait(driver, 10).until(ec.presence_of_element_located((
+    #   By.CSS_SELECTOR, "(//img[@class='summary-thumbnail-image loaded'])[1]"
+    # )))
+    listen_to_podcast = driver.find_element(By.XPATH, "//div[@class='sqs-block-button-container--left']//a")
+    actions = ActionChains(driver)
+    actions.move_to_element(listen_to_podcast).perform()
+    listen_to_podcast.click()
+    driver.switch_to.window(driver.window_handles[2])
+    WebDriverWait(driver, 10).until(ec.title_contains("Blog"))
+    time.sleep(2)
+    first_podcast = driver.find_element(
+      By.XPATH,
+      "(//article[@class='blog-basic-grid--container entry blog-item is-loaded']//div//a//img)[1]")
+    actions = ActionChains(driver)
+    actions.move_to_element(first_podcast).perform()
+    assert first_podcast.is_displayed(), "'Listen To Podcast' heading is not displayed"
+    text = driver.find_element(By.XPATH, "(//div[@class='blog-basic-grid--text']//h1//a)[1]")
+    tmp_text = text.text
+    first_podcast.click()
+    # time.sleep(7)
+    WebDriverWait(driver, 10).until(ec.presence_of_element_located((
+      By.XPATH, "//div[@class='blog-item-top-wrapper']//div//h1"
+    )))
+    frame = driver.find_element(By.XPATH, "//iframe[@title='Libsyn Player']")
+    driver.switch_to.frame(frame)
+    time.sleep(2)
     play = driver.find_element(By.XPATH, "//i[@class='play center-block fa fa-play-circle-o']")
     actions = ActionChains(driver)
     actions.move_to_element(play).perform()
     play.click()
-    time.sleep(3)
+    # WebDriverWait(driver, 10).until(ec.title_contains("Opening Act Podcast"))
+    # time.sleep(2)
+    # frame = driver.find_element(By.XPATH, "//iframe[@title='Libsyn Player']")
+    # play = driver.find_element(By.XPATH, "play center-block fa fa-play-circle-o")
+    # play.click()
+    # time.sleep(2)
+
+    # driver.close()
+    # driver.switch_to.window(driver.window_handles[0])
+    # print("Instagram Link in Footer of TravelNoire Website is working as expected")
 
 
 def post_page_load_pop_up():
@@ -89,11 +132,11 @@ def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for ios safari, on staging.shadowandact.com podcast do work as expected"}}')
+      '{"status":"passed", "reason": ", for desktop, on shadowandact.com podcast do work as expected"}}')
 
 
 environment()
-# page_load()
+page_load()
 post_page_load_pop_up()
 verify_podcast()
 set_status()

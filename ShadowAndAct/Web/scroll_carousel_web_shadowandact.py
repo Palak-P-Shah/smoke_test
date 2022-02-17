@@ -15,7 +15,7 @@ desired_cap = {
    'browser': 'Chrome',
    'browser_version': '94.0',
    'os': 'Windows',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right arrows',  # test name
    'build': 'BStack Build Number'
 }
@@ -95,7 +95,7 @@ def set_status():
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
       '{"status":"passed", "reason": ", for desktop, in carousel left and right arrow '
-      'Links for shadowandact do work as expected"}}')
+      'Links for staging.shadowandact do work as expected"}}')
 
 
 environment()

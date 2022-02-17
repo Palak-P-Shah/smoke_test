@@ -7,7 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 
 
-url_shadowandact = "https://shadowandact.com/"
+url_shadowandact = "https://staging.shadowandact.com/"
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -18,7 +18,7 @@ desired_cap = {
   'browserName': 'Chrome',
   'browser_version': 'latest',
   'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com most popular section is as expected on android chrome',
+   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com most popular section is as expected on android chrome',
    'build': 'BStack Build Number'
 }
 
@@ -41,7 +41,7 @@ def page_load():
     except TimeoutException:
         driver.execute_script(
           'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-          '{"status":"failed", "reason": for shadowandact.com, for android chrome, took too long but no response, checking title"}}')
+          '{"status":"failed", "reason": for staging.shadowandact.com, for android chrome, took too long but no response, checking title"}}')
         driver.quit()
 
 
@@ -114,11 +114,12 @@ def post_page_load_pop_up():
     except NoSuchElementException:
         print("shadowandact footer adv does not exist")
 
+
 def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for android chrome, on shadowandact.com Most Popular section do work as expected"}}')
+      '{"status":"passed", "reason": ", for android chrome, on staging.shadowandact.com Most Popular section do work as expected"}}')
 
 
 environment()

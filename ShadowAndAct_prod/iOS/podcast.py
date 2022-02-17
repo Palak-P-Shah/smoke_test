@@ -32,7 +32,7 @@ desired_cap = {
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for podcast is as expected on ios safari',
+   'name': 'BStack-[Python] Smoke Test for shadowandact.com for podcast is as expected on ios safari',
    'build': 'BStack Build Number'
 }
 
@@ -89,7 +89,7 @@ def set_status():
     print("Function called set Status")
     driver.execute_script(
       'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-      '{"status":"passed", "reason": ", for ios safari, on staging.shadowandact.com podcast do work as expected"}}')
+      '{"status":"passed", "reason": ", for ios safari, on shadowandact.com podcast do work as expected"}}')
 
 
 environment()
