@@ -26,7 +26,7 @@ desired_cap = {
     'os': 'Android',
     'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right slides',  # test name
-    'build': "BROWSERSTACK_BUILD_NAME",
+    'build': "browserstack build name ci/cd",
     # 'browserstack.local': browserstack_local,
     # 'browserstack.localIdentifier': browserstack_local_identifier,
     # 'browserstack.user': username,
