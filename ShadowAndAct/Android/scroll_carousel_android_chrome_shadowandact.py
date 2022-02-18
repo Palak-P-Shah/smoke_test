@@ -1,4 +1,4 @@
-import time, os
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -8,11 +8,11 @@ from selenium.webdriver import ActionChains
 
 url_shadowandact = "https://staging.shadowandact.com/"
 
-username = os.getenv("palakshah_rcAxD5")
-access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
-build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
-browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
-browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
+# username = os.getenv("palakshah_rcAxD5")
+# access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
+# build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
+# browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
+# browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
@@ -26,12 +26,12 @@ desired_cap = {
     'os': 'Android',
     'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right slides',  # test name
-    'build': build_name,
+    'build': "BROWSERSTACK_BUILD_NAME"
     # 'build': "BROWSERSTACK_BUILD_NAME",
-    'browserstack.local': browserstack_local,
-    'browserstack.localIdentifier': browserstack_local_identifier,
-    'browserstack.user': username,
-    'browserstack.key': access_key
+    # 'browserstack.local': browserstack_local,
+    # 'browserstack.localIdentifier': browserstack_local_identifier,
+    # 'browserstack.user': username,
+    # 'browserstack.key': access_key
 }
 # desired_cap['browserstack.debug'] = True
 desired_cap["chromeOptions"] = {}
