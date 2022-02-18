@@ -10,7 +10,7 @@ url_shadowandact = "https://staging.shadowandact.com/"
 
 username = os.getenv("palakshah_rcAxD5")
 access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
-build_name = os.getenv("BStack-[Python] Smoke Test for staging.shadowandact.com in carousel for left and right slides")
+build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 # browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
 # browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 
