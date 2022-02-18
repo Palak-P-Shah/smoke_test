@@ -26,7 +26,7 @@ desired_cap = {
     'os': 'Android',
     'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right slides',  # test name
-    # 'build': "browserstack build name ci/cd",
+    'build': build_name,
     # 'browserstack.local': browserstack_local,
     # 'browserstack.localIdentifier': browserstack_local_identifier,
     # 'browserstack.user': username,
@@ -36,7 +36,6 @@ desired_cap = {
 desired_cap["chromeOptions"] = {}
 # desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
-desired_cap["build"]["BROWSERSTACK_BUILD_NAME"] = ["build android test"]
 # driver = webdriver.Remote(
 #     command_executor='https://hub-cloud.browserstack.com/wd/hub',
 #     desired_capabilities=desired_cap)
