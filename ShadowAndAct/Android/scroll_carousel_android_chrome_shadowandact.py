@@ -11,7 +11,7 @@ url_shadowandact = "https://staging.shadowandact.com/"
 username = os.getenv("palakshah_rcAxD5")
 access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
 build_name = os.getenv("BStack-[Python] Smoke Test for staging.shadowandact.com in carousel for left and right slides")
-browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
+# browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
 # browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
@@ -27,7 +27,7 @@ desired_cap = {
     'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
            'carousel for left and right slides',  # test name
     'build': build_name,
-    'browserstack.local': browserstack_local,
+    # 'browserstack.local': browserstack_local,
     # 'browserstack.localIdentifier': browserstack_local_identifier,
     # 'browserstack.user': username,
     # 'browserstack.key': access_key
