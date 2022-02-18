@@ -8,8 +8,8 @@ from selenium.webdriver import ActionChains
 
 url_shadowandact = "https://staging.shadowandact.com/"
 
-# username = os.getenv("palakshah_rcAxD5")
-# access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
+username = os.getenv("palakshah_rcAxD5")
+access_key = os.getenv("s2rqmyxFs8r999bzvGXJ")
 build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
 browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
@@ -30,8 +30,8 @@ desired_cap = {
     # 'build': "BROWSERSTACK_BUILD_NAME",
     'browserstack.local': browserstack_local,
     'browserstack.localIdentifier': browserstack_local_identifier,
-    # 'browserstack.user': username,
-    # 'browserstack.key': access_key
+    'browserstack.user': username,
+    'browserstack.key': access_key
 }
 # desired_cap['browserstack.debug'] = True
 desired_cap["chromeOptions"] = {}
