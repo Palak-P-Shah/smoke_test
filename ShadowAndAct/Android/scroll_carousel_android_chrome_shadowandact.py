@@ -28,8 +28,8 @@ desired_cap = {
            'carousel for left and right slides',  # test name
     # 'build': "test build",
     'build': build_name,
-    # 'browserstack.local': browserstack_local,
-    # 'browserstack.localIdentifier': browserstack_local_identifier,
+    'browserstack.local': browserstack_local,
+    'browserstack.localIdentifier': browserstack_local_identifier,
     'browserstack.user': username,
     'browserstack.key': access_key
 }
