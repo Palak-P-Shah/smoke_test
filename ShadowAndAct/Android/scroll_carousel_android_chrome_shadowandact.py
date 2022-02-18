@@ -36,13 +36,13 @@ desired_cap = {
 desired_cap["chromeOptions"] = {}
 # desired_cap["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
-driver = webdriver.Remote(
-    command_executor='https://hub-cloud.browserstack.com/wd/hub',
-    desired_capabilities=desired_cap)
-
 # driver = webdriver.Remote(
-#     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+#     command_executor='https://hub-cloud.browserstack.com/wd/hub',
 #     desired_capabilities=desired_cap)
+
+driver = webdriver.Remote(
+    command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+    desired_capabilities=desired_cap)
 
 
 def environment():
