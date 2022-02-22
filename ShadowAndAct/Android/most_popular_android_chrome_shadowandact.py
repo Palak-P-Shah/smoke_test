@@ -1,4 +1,5 @@
 import time
+import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -8,6 +9,9 @@ from selenium import webdriver
 
 
 url_shadowandact = "https://staging.shadowandact.com/"
+username = os.getenv("BROWSERSTACK_USERNAME")
+access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
+build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -18,14 +22,19 @@ desired_cap = {
   'browserName': 'Chrome',
   'browser_version': 'latest',
   'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com most popular section is as expected on android chrome',
-   'build': 'BStack Build Number'
+  'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com most popular section is as expected on android chrome',
+  'build': build_name,
+  'browserstack.user': username,
+  'browserstack.key': access_key
 }
 
 desired_cap["chromeOptions"] = {}
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
+# driver = webdriver.Remote(
+#     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+#     desired_capabilities=desired_cap)
 driver = webdriver.Remote(
-    command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+    command_executor='https://hub-cloud.browserstack.com/wd/hub',
     desired_capabilities=desired_cap)
 
 
