@@ -1,4 +1,5 @@
 import time
+import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -9,21 +10,24 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-options = Options()
-options.headless = False
-options.add_argument("--disable-notifications")
-options.add_argument('--start-maximized')
-# options.add_argument("--headless")
-options.add_argument("--window-size=1920x1080")
-
-user_agent = \
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 PTST/1.0'
-options.add_argument('user-agent={0}'.format(user_agent))
+# options = Options()
+# options.headless = False
+# options.add_argument("--disable-notifications")
+# options.add_argument('--start-maximized')
+# # options.add_argument("--headless")
+# options.add_argument("--window-size=1920x1080")
+#
+# user_agent = \
+#     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 PTST/1.0'
+# options.add_argument('user-agent={0}'.format(user_agent))
 
 
 url_podcast = "https://html5-player.libsyn.com/embed/episode/id/21613013/height/360/theme/legacy/thumbnail/yes/direction/backward/?wmode=opaque"
-BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
-BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
+# BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
+# BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
+username = os.getenv("BROWSERSTACK_USERNAME")
+access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
+build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 desired_cap = {
   'os_version': '14',
   'device': 'iPhone 12',
@@ -32,15 +36,22 @@ desired_cap = {
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for podcast is as expected on ios safari',
-   'build': 'BStack Build Number'
+  'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com for podcast is as expected on ios safari',
+   #'build': 'BStack Build Number'
+  'build': build_name,
+  'browserstack.user': username,
+  'browserstack.key': access_key
 }
 
-desired_cap["chromeOptions"] = {}
-desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
+# desired_cap["chromeOptions"] = {}
+# desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
+# driver = webdriver.Remote(
+#     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+#     desired_capabilities=desired_cap)
 driver = webdriver.Remote(
-    command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+    command_executor='https://hub-cloud.browserstack.com/wd/hub',
     desired_capabilities=desired_cap)
+
 # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 

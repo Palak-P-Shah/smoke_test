@@ -17,14 +17,14 @@ browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 # BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 # BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '10.0',
+    'os_version': '10.0',
     'device': 'Google Pixel 3',
     'real_mobile': 'true',
     'browserstack.local': 'false',
     'browserName': 'Chrome',
     'browser_version': 'latest',
     'os': 'Android',
-    'name': 'BStack-[Python] Smoke Test for staging.shadowandact.com in '
+    'name': 'BStack-[Python] Smoke Test in android chrome for staging.shadowandact.com in '
            'carousel for left and right slides',  # test name
     # 'build': "BStack Build Number",
     'build': build_name,

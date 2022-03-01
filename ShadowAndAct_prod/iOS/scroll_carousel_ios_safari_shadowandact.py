@@ -1,4 +1,5 @@
 import time
+import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -7,25 +8,35 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 
 url_shadowandact = "https://shadowandact.com/"
-BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
-BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
+username = os.getenv("BROWSERSTACK_USERNAME")
+access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
+build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
+browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
+# BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
+# BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '14',
+  'os_version': '14',
   'device': 'iPhone 12',
   'real_mobile': 'true',
   'browserstack.local': 'false',
   'browserName': 'safari',
   'browser_version': 'latest',
   'os': 'iOS',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
+  'name': 'BStack-[Python] Smoke Test for shadowandact.com in '
            'carousel for left and right slides for ios safari',  # test name
-   'build': 'BStack Build Number'
+   #'build': 'BStack Build Number'
+  'build': build_name,
+  'browserstack.user': username,
+  'browserstack.key': access_key
 }
 
-desired_cap["chromeOptions"] = {}
-desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
+# desired_cap["chromeOptions"] = {}
+# desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
+# driver = webdriver.Remote(
+#     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+#     desired_capabilities=desired_cap)
 driver = webdriver.Remote(
-    command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+    command_executor='https://hub-cloud.browserstack.com/wd/hub',
     desired_capabilities=desired_cap)
 
 

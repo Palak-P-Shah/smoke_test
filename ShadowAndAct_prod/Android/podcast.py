@@ -1,13 +1,14 @@
 import time
+import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 
 options = Options()
 options.headless = False
@@ -22,6 +23,11 @@ options.add_argument('user-agent={0}'.format(user_agent))
 
 
 url_shadowandact = "https://shadowandact.com/"
+username = os.getenv("BROWSERSTACK_USERNAME")
+access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
+build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
+browserstack_local = os.getenv("BROWSERSTACK_LOCAL")
+browserstack_local_identifier = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
@@ -32,16 +38,22 @@ desired_cap = {
   'browserName': 'Chrome',
   'browser_version': 'latest',
   'os': 'Android',
-   'name': 'BStack-[Python] Smoke Test for shadowandact.com for podcast is as expected on android chrome',
-   'build': 'BStack Build Number'
+  'name': 'BStack-[Python] Smoke Test for shadowandact.com for podcast is as expected on android chrome',
+  #'build': 'BStack Build Number'
+  'build': build_name,
+  'browserstack.user': username,
+  'browserstack.key': access_key
 }
 
 desired_cap["chromeOptions"] = {}
 desired_cap["chromeOptions"]["args"] = ["--disable-notifications"]
-driver = webdriver.Remote(
-    command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
-    desired_capabilities=desired_cap)
+# driver = webdriver.Remote(
+#     command_executor='https://'+BROWSERSTACK_USERNAME+':'+BROWSERSTACK_ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+#     desired_capabilities=desired_cap)
 # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+driver = webdriver.Remote(
+    command_executor='https://hub-cloud.browserstack.com/wd/hub',
+    desired_capabilities=desired_cap)
 
 
 def environment():

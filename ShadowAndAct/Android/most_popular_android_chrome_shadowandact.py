@@ -15,7 +15,7 @@ build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 BROWSERSTACK_USERNAME = 'palakshah_rcAxD5'
 BROWSERSTACK_ACCESS_KEY = 's2rqmyxFs8r999bzvGXJ'
 desired_cap = {
-   'os_version': '10.0',
+  'os_version': '10.0',
   'device': 'Google Pixel 3',
   'real_mobile': 'true',
   'browserstack.local': 'false',
